@@ -76,60 +76,27 @@ bool set_color_mode(bool on) {
 
 void set_attribute(attribute_t attribute, t3_attr_t value) {
   switch (attribute) {
-    case attribute_t::NON_PRINT:
-      attributes.non_print = value;
-      break;
-    case attribute_t::TEXT_SELECTION_CURSOR:
-      attributes.text_selection_cursor = value;
-      break;
-    case attribute_t::TEXT_SELECTION_CURSOR2:
-      attributes.text_selection_cursor2 = value;
-      break;
-    case attribute_t::BAD_DRAW:
-      attributes.bad_draw = value;
-      break;
-    case attribute_t::TEXT_CURSOR:
-      attributes.text_cursor = value;
-      break;
-    case attribute_t::TEXT:
-      attributes.text = value;
-      break;
-    case attribute_t::TEXT_SELECTED:
-      attributes.text_selected = value;
-      break;
-    case attribute_t::HOTKEY_HIGHLIGHT:
-      attributes.hotkey_highlight = value;
-      break;
-    case attribute_t::DIALOG:
-      attributes.dialog = value;
-      break;
-    case attribute_t::DIALOG_SELECTED:
-      attributes.dialog_selected = value;
-      break;
-    case attribute_t::BUTTON_SELECTED:
-      attributes.button_selected = value;
-      break;
-    case attribute_t::SCROLLBAR:
-      attributes.scrollbar = value;
-      break;
-    case attribute_t::MENUBAR:
-      attributes.menubar = value;
-      break;
-    case attribute_t::MENUBAR_SELECTED:
-      attributes.menubar_selected = value;
-      break;
+    case attribute_t::NON_PRINT: attributes.non_print = value; break;
+    case attribute_t::TEXT_SELECTION_CURSOR: attributes.text_selection_cursor = value; break;
+    case attribute_t::TEXT_SELECTION_CURSOR2: attributes.text_selection_cursor2 = value; break;
+    case attribute_t::BAD_DRAW: attributes.bad_draw = value; break;
+    case attribute_t::TEXT_CURSOR: attributes.text_cursor = value; break;
+    case attribute_t::TEXT: attributes.text = value; break;
+    case attribute_t::TEXT_SELECTED: attributes.text_selected = value; break;
+    case attribute_t::HOTKEY_HIGHLIGHT: attributes.hotkey_highlight = value; break;
+    case attribute_t::DIALOG: attributes.dialog = value; break;
+    case attribute_t::DIALOG_SELECTED: attributes.dialog_selected = value; break;
+    case attribute_t::BUTTON_SELECTED: attributes.button_selected = value; break;
+    case attribute_t::SCROLLBAR: attributes.scrollbar = value; break;
+    case attribute_t::MENUBAR: attributes.menubar = value; break;
+    case attribute_t::MENUBAR_SELECTED: attributes.menubar_selected = value; break;
     case attribute_t::BACKGROUND:
       attributes.background = value;
       t3_win_set_default_attrs(nullptr, value);
       break;
-    case attribute_t::SHADOW:
-      attributes.shadow = value;
-      break;
-    case attribute_t::META_TEXT:
-      attributes.meta_text = value;
-      break;
-    default:
-      return;
+    case attribute_t::SHADOW: attributes.shadow = value; break;
+    case attribute_t::META_TEXT: attributes.meta_text = value; break;
+    default: return;
   }
 
   dialog_t::force_redraw_all();
@@ -137,92 +104,75 @@ void set_attribute(attribute_t attribute, t3_attr_t value) {
 
 t3_attr_t get_attribute(attribute_t attribute) {
   switch (attribute) {
-    case attribute_t::NON_PRINT:
-      return attributes.non_print;
-    case attribute_t::TEXT_SELECTION_CURSOR:
-      return attributes.text_selection_cursor;
-    case attribute_t::TEXT_SELECTION_CURSOR2:
-      return attributes.text_selection_cursor2;
-    case attribute_t::BAD_DRAW:
-      return attributes.bad_draw;
-    case attribute_t::TEXT_CURSOR:
-      return attributes.text_cursor;
-    case attribute_t::TEXT:
-      return attributes.text;
-    case attribute_t::TEXT_SELECTED:
-      return attributes.text_selected;
-    case attribute_t::HOTKEY_HIGHLIGHT:
-      return attributes.hotkey_highlight;
-    case attribute_t::DIALOG:
-      return attributes.dialog;
-    case attribute_t::DIALOG_SELECTED:
-      return attributes.dialog_selected;
-    case attribute_t::BUTTON_SELECTED:
-      return attributes.button_selected;
-    case attribute_t::SCROLLBAR:
-      return attributes.scrollbar;
-    case attribute_t::MENUBAR:
-      return attributes.menubar;
-    case attribute_t::MENUBAR_SELECTED:
-      return attributes.menubar_selected;
-    case attribute_t::BACKGROUND:
-      return attributes.background;
-    case attribute_t::SHADOW:
-      return attributes.shadow;
-    case attribute_t::META_TEXT:
-      return attributes.meta_text;
-    default:
-      return 0;
+    case attribute_t::NON_PRINT: return attributes.non_print;
+    case attribute_t::TEXT_SELECTION_CURSOR: return attributes.text_selection_cursor;
+    case attribute_t::TEXT_SELECTION_CURSOR2: return attributes.text_selection_cursor2;
+    case attribute_t::BAD_DRAW: return attributes.bad_draw;
+    case attribute_t::TEXT_CURSOR: return attributes.text_cursor;
+    case attribute_t::TEXT: return attributes.text;
+    case attribute_t::TEXT_SELECTED: return attributes.text_selected;
+    case attribute_t::HOTKEY_HIGHLIGHT: return attributes.hotkey_highlight;
+    case attribute_t::DIALOG: return attributes.dialog;
+    case attribute_t::DIALOG_SELECTED: return attributes.dialog_selected;
+    case attribute_t::BUTTON_SELECTED: return attributes.button_selected;
+    case attribute_t::SCROLLBAR: return attributes.scrollbar;
+    case attribute_t::MENUBAR: return attributes.menubar;
+    case attribute_t::MENUBAR_SELECTED: return attributes.menubar_selected;
+    case attribute_t::BACKGROUND: return attributes.background;
+    case attribute_t::SHADOW: return attributes.shadow;
+    case attribute_t::META_TEXT: return attributes.meta_text;
+    default: return 0;
   }
 }
 
 t3_attr_t get_default_attribute(attribute_t attribute, bool color_mode) {
-  /* The attributes fall into two categories:
-     - full attributes
-     - highlight attributes
-     Highlight attributes are partial attributes which will be added to
-     other attributes, while the full attributes define the complete rendering.
-     In full attributes, the color should not be left unspecified, at least
-     not in the default setting.
-
-     The attributes in this set don't use the T3_ATTR_*_SET bits to allow older software to keep
-     working without modification or recompilation. They are chosen such that all the highlight
-     attributes are strictly additive.
-  */
   switch (attribute) {
     case attribute_t::NON_PRINT:
       return T3_ATTR_UNDERLINE;
+
     case attribute_t::TEXT_SELECTION_CURSOR:
-      return color_mode ? T3_ATTR_FG_BLUE | T3_ATTR_BG_CYAN : T3_ATTR_UNDERLINE | T3_ATTR_BLINK;
+      return T3_ATTR_REVERSE | T3_ATTR_BOLD;
     case attribute_t::TEXT_SELECTION_CURSOR2:
-      return color_mode ? T3_ATTR_FG_BLUE | T3_ATTR_BG_GREEN
-                        : T3_ATTR_UNDERLINE | T3_ATTR_REVERSE | T3_ATTR_BLINK;
-    case attribute_t::BAD_DRAW:
-      return color_mode ? T3_ATTR_FG_RED : T3_ATTR_BOLD;
+      return T3_ATTR_REVERSE | T3_ATTR_UNDERLINE;
     case attribute_t::TEXT_CURSOR:
-      return color_mode ? T3_ATTR_FG_BLUE | T3_ATTR_BG_CYAN : T3_ATTR_REVERSE;
+      return T3_ATTR_REVERSE | T3_ATTR_BOLD;
+
+    case attribute_t::BAD_DRAW:
+      return color_mode ? T3_ATTR_FG_RED | T3_ATTR_BOLD : T3_ATTR_BOLD;
+
     case attribute_t::TEXT:
-      return ensure_color(color_mode ? T3_ATTR_FG_WHITE | T3_ATTR_BG_BLUE : 0);
+      return ensure_color(0);
     case attribute_t::TEXT_SELECTED:
-      return ensure_color(color_mode ? T3_ATTR_FG_BLUE | T3_ATTR_BG_WHITE : T3_ATTR_REVERSE);
+      return ensure_color(T3_ATTR_REVERSE);
+
     case attribute_t::HOTKEY_HIGHLIGHT:
-      return color_mode ? T3_ATTR_FG_BLUE : T3_ATTR_UNDERLINE;
+      return color_mode ? T3_ATTR_FG_YELLOW | T3_ATTR_BOLD : T3_ATTR_UNDERLINE;
+
     case attribute_t::DIALOG:
-      return ensure_color(color_mode ? T3_ATTR_FG_BLACK | T3_ATTR_BG_WHITE : 0);
+      return ensure_color(0);
     case attribute_t::DIALOG_SELECTED:
-      return ensure_color(color_mode ? T3_ATTR_FG_WHITE | T3_ATTR_BG_BLACK : T3_ATTR_REVERSE);
+      return ensure_color(T3_ATTR_REVERSE | T3_ATTR_BOLD);
     case attribute_t::BUTTON_SELECTED:
-      return ensure_color(color_mode ? T3_ATTR_FG_BLACK | T3_ATTR_BG_CYAN : T3_ATTR_REVERSE);
+      return ensure_color(T3_ATTR_REVERSE | T3_ATTR_BOLD);
+
     case attribute_t::SCROLLBAR:
-      return ensure_color(color_mode ? T3_ATTR_FG_WHITE | T3_ATTR_BG_BLACK : T3_ATTR_REVERSE);
+      return ensure_color(color_mode ? T3_ATTR_FG_CYAN | T3_ATTR_BOLD : T3_ATTR_REVERSE);
+
     case attribute_t::MENUBAR:
-      return ensure_color(color_mode ? T3_ATTR_FG_BLACK | T3_ATTR_BG_CYAN : T3_ATTR_REVERSE);
+      return ensure_color(color_mode
+                              ? T3_ATTR_FG_WHITE | T3_ATTR_BG_BLUE | T3_ATTR_BOLD
+                              : T3_ATTR_REVERSE);
     case attribute_t::MENUBAR_SELECTED:
-      return ensure_color(color_mode ? T3_ATTR_FG_WHITE | T3_ATTR_BG_BLACK : 0);
+      return ensure_color(color_mode
+                              ? T3_ATTR_FG_BLACK | T3_ATTR_BG_WHITE | T3_ATTR_BOLD
+                              : T3_ATTR_BOLD);
+
     case attribute_t::BACKGROUND:
       return 0;
+
     case attribute_t::SHADOW:
       return ensure_color(color_mode ? T3_ATTR_BG_BLACK : T3_ATTR_REVERSE);
+
     case attribute_t::META_TEXT:
       return color_mode ? T3_ATTR_FG_CYAN : T3_ATTR_UNDERLINE;
   }

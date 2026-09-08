@@ -99,7 +99,9 @@ CXXFLAGS += -std=c++11
 CXXFLAGS += -fvisibility=hidden
 CXXFLAGS += -DWITH_X11
 CXXFLAGS += -DX11_MOD_NAME=\"$(CURDIR)/.libs/x11.mod\"
+ifeq ($(shell uname -s),Linux)
 CXXFLAGS += -DHAS_GPM
+endif
 #~ CXXFLAGS += -DHAS_VECTOR_SHRINK_TO_FIT
 
 LDLIBS.libt3widget.la += $(T3LDFLAGS.t3window) -lt3window
@@ -111,7 +113,9 @@ else
 LDLIBS.libt3widget.la += `pkg-config --libs libpcre`
 endif
 LDLIBS.libt3widget.la += -lunistring
+ifeq ($(shell uname -s),Linux)
 LDLIBS.libt3widget.la += -lgpm
+endif
 LDLIBS.libt3widget.la += -lm
 
 CXXFLAGS += -DHAS_DLFCN

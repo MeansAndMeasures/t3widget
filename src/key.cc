@@ -604,7 +604,10 @@ complex_error_t init_keys(const optional<std::string> &term, bool separate_keypa
   // Enable bracketed paste.
   t3_term_putp("\033[?2004h");
 
-  init_mouse_reporting(t3_key_get_named_node(keymap.get(), "_xterm_mouse") != nullptr);
+  t3_term_caps_t term_caps;
+  t3_term_get_caps(&term_caps);
+  init_mouse_reporting((term_caps.cap_flags & T3_TERM_CAP_MOUSE) != 0 ||
+                       t3_key_get_named_node(keymap.get(), "_xterm_mouse") != nullptr);
 
   /* Load all the known keys from the terminfo database.
      - find out how many sequences there are
